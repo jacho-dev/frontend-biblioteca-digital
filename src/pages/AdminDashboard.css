@@ -1,0 +1,57 @@
+.admin-dashboard {
+  padding: 2rem 0;
+}
+
+.admin-dashboard__header {
+  margin-bottom: 1.5rem;
+}
+
+.admin-dashboard__title {
+  margin: 0;
+}
+
+.admin-dashboard__subtitle {
+  color: #666;
+}
+
+.admin-dashboard__stats {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-bottom: 2rem;
+}
+
+.admin-dashboard__stat-card {
+  border: 1px solid #e1e5eb;
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem;
+}
+
+.admin-dashboard__stat-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.admin-dashboard__stat-card p {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.admin-dashboard__table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-dashboard__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.admin-dashboard__table th,
+.admin-dashboard__table td {
+  border: 1px solid #eceff4;
+  padding: 0.75rem;
+  text-align: left;
+}

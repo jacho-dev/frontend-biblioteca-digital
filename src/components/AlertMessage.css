@@ -1,0 +1,23 @@
+.alert-message {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.alert-message__content {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 500;
+}
+
+.alert-message__icon {
+  font-size: 1.1rem;
+}
+
+.alert-message__close {
+  margin-left: 1rem;
+}

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useBooks } from '../hooks/useBooks';
+import { useRentals } from '../hooks/useRentals';
+import AlertMessage from '../components/AlertMessage';
+import { useAlert } from '../hooks/useAlert';
 import './MyRentals.css';
 
 const MyRentals = () => {
   const { user } = useAuth();
-  const { getBookById } = useBooks();
-  const [rentals, setRentals] = useLocalStorage('rentals', []);
+  const { userRentals, extendRental, returnRental } = useRentals(user);
   const [filter, setFilter] = useState('all');
+  const { alert, showAlert, clearAlert } = useAlert();
 
   if (!user) {
     return (
@@ -23,7 +24,7 @@ const MyRentals = () => {
     );
   }
 
-  const filteredRentals = rentals.filter(rental => {
+  const filteredRentals = userRentals.filter((rental) => {
     if (filter === 'all') return true;
     if (filter === 'active') return rental.status === 'active';
     if (filter === 'returned') return rental.status === 'returned';
@@ -31,40 +32,13 @@ const MyRentals = () => {
   });
 
   const handleExtendRental = (rentalId) => {
-    const rental = rentals.find(r => r.id === rentalId);
-    if (rental && rental.status === 'active' && !rental.extended) {
-      const updatedRentals = rentals.map(r => {
-        if (r.id === rentalId) {
-          const newDueDate = new Date(r.dueDate);
-          newDueDate.setDate(newDueDate.getDate() + 15);
-          return {
-            ...r,
-            dueDate: newDueDate.toISOString().split('T')[0],
-            extended: true
-          };
-        }
-        return r;
-      });
-      setRentals(updatedRentals);
-      alert('Alquiler extendido 15 días con éxito');
-    } else if (rental && rental.extended) {
-      alert('Este alquiler ya ha sido extendido');
-    }
+    const result = extendRental(rentalId);
+    showAlert(result.success ? 'success' : 'warning', result.success ? 'Alquiler extendido 15 días con éxito' : result.error);
   };
 
   const handleReturnBook = (rentalId) => {
-    const updatedRentals = rentals.map(r => {
-      if (r.id === rentalId) {
-        return {
-          ...r,
-          status: 'returned',
-          returnDate: new Date().toISOString().split('T')[0]
-        };
-      }
-      return r;
-    });
-    setRentals(updatedRentals);
-    alert('Libro devuelto con éxito');
+    returnRental(rentalId);
+    showAlert('success', 'Libro devuelto con éxito');
   };
 
   const getStatusClass = (status) => {
@@ -83,30 +57,32 @@ const MyRentals = () => {
     <div className="my-rentals">
       <div className="container">
         <div className="my-rentals__header">
-          <h1 className="my-rentals__title">Mis Alquileres</h1>
+          <h1 className="my-rentals__title"><i className="fa-solid fa-clock-rotate-left" /> Mis Alquileres</h1>
           <p className="my-rentals__subtitle">
             Gestiona tus libros alquilados y sus fechas de devolución
           </p>
         </div>
+
+        <AlertMessage alert={alert} onClose={clearAlert} />
 
         <div className="my-rentals__filters">
           <button
             onClick={() => setFilter('all')}
             className={`filter-btn ${filter === 'all' ? 'filter-btn--active' : ''}`}
           >
-            Todos ({rentals.length})
+            Todos ({userRentals.length})
           </button>
           <button
             onClick={() => setFilter('active')}
             className={`filter-btn ${filter === 'active' ? 'filter-btn--active' : ''}`}
           >
-            Activos ({rentals.filter(r => r.status === 'active').length})
+            Activos ({userRentals.filter((r) => r.status === 'active').length})
           </button>
           <button
             onClick={() => setFilter('returned')}
             className={`filter-btn ${filter === 'returned' ? 'filter-btn--active' : ''}`}
           >
-            Devueltos ({rentals.filter(r => r.status === 'returned').length})
+            Devueltos ({userRentals.filter((r) => r.status === 'returned').length})
           </button>
         </div>
 
@@ -114,7 +90,7 @@ const MyRentals = () => {
           <div className="my-rentals__empty">
             <h2>No tienes alquileres {filter === 'all' ? '' : getStatusText(filter.toLowerCase())}</h2>
             <p>
-              {filter === 'active' 
+              {filter === 'active'
                 ? 'No tienes libros alquilados actualmente.'
                 : filter === 'returned'
                 ? 'No has devuelto ningún libro aún.'
@@ -124,17 +100,16 @@ const MyRentals = () => {
           </div>
         ) : (
           <div className="my-rentals__list">
-            {filteredRentals.map(rental => {
-              const book = getBookById(rental.bookId);
+            {filteredRentals.map((rental) => {
               const overdue = rental.status === 'active' && isOverdue(rental.dueDate);
-              
+
               return (
                 <div key={rental.id} className="rental-card">
                   <div className="rental-card__content">
                     <div className="rental-card__info">
                       <h3 className="rental-card__title">{rental.bookTitle}</h3>
                       <p className="rental-card__author">por {rental.bookAuthor}</p>
-                      
+
                       <div className="rental-card__details">
                         <div className="rental-card__detail">
                           <span className="rental-card__label">Fecha de alquiler:</span>
@@ -154,7 +129,7 @@ const MyRentals = () => {
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="rental-card__status">
                         <span className={`status ${getStatusClass(rental.status)}`}>
                           {getStatusText(rental.status)}
@@ -164,7 +139,7 @@ const MyRentals = () => {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="rental-card__actions">
                       {rental.status === 'active' && (
                         <>

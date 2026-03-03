@@ -17,19 +17,24 @@ const Header = () => {
       <div className="container">
         <nav className="header__nav">
           <Link to="/" className="header__logo">
-            📚 Biblioteca Digital
+            <i className="fa-solid fa-book-open-reader" /> Biblioteca Digital
           </Link>
-          
+
           <ul className="header__menu">
             <li className="header__menu-item">
-              <Link to="/" className="header__link">Inicio</Link>
+              <Link to="/" className="header__link"><i className="fa-solid fa-house" /> Inicio</Link>
             </li>
             <li className="header__menu-item">
-              <Link to="/books" className="header__link">Libros</Link>
+              <Link to="/books" className="header__link"><i className="fa-solid fa-book" /> Libros</Link>
             </li>
             {isAuthenticated && (
               <li className="header__menu-item">
-                <Link to="/my-rentals" className="header__link">Mis Alquileres</Link>
+                <Link to="/my-rentals" className="header__link"><i className="fa-solid fa-clock-rotate-left" /> Mis Alquileres</Link>
+              </li>
+            )}
+            {isAuthenticated && user?.role === 'admin' && (
+              <li className="header__menu-item">
+                <Link to="/admin" className="header__link"><i className="fa-solid fa-chart-line" /> Panel Admin</Link>
               </li>
             )}
           </ul>
@@ -38,15 +43,15 @@ const Header = () => {
             {isAuthenticated ? (
               <div className="header__user">
                 <span className="header__username">
-                  👤 {user.name} ({user.role === 'admin' ? 'Admin' : 'Usuario'})
+                  <i className="fa-solid fa-circle-user" /> {user.name} ({user.role === 'admin' ? 'Admin' : 'Usuario'})
                 </span>
                 <button onClick={handleLogout} className="btn btn--secondary">
-                  Cerrar Sesión
+                  <i className="fa-solid fa-right-from-bracket" /> Cerrar Sesión
                 </button>
               </div>
             ) : (
               <Link to="/login" className="btn btn--primary">
-                Iniciar Sesión
+                <i className="fa-solid fa-right-to-bracket" /> Iniciar Sesión
               </Link>
             )}
           </div>
