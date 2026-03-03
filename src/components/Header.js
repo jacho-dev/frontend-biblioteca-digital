@@ -32,6 +32,11 @@ const Header = () => {
                 <Link to="/my-rentals" className="header__link">Mis Alquileres</Link>
               </li>
             )}
+            {isAuthenticated && user?.role === 'admin' && (
+              <li className="header__menu-item">
+                <Link to="/admin" className="header__link">Panel Admin</Link>
+              </li>
+            )}
           </ul>
 
           <div className="header__auth">
