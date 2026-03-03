@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRentals } from '../hooks/useRentals';
+import { useAlert } from '../hooks/useAlert';
+import AlertMessage from '../components/AlertMessage';
 import './MyRentals.css';
 
 const MyRentals = () => {
@@ -31,12 +33,12 @@ const MyRentals = () => {
 
   const handleExtendRental = (rentalId) => {
     const result = extendRental(rentalId);
-    alert(result.success ? 'Alquiler extendido 15 días con éxito' : result.error);
+    showAlert(result.success ? 'success' : 'danger', result.success ? 'Alquiler extendido 15 dias con exito' : result.error);
   };
 
   const handleReturnBook = (rentalId) => {
     returnRental(rentalId);
-    alert('Libro devuelto con éxito');
+    showAlert('success', 'Libro devuelto con exito');
   };
 
   const getStatusClass = (status) => {

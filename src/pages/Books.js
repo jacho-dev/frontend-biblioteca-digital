@@ -15,6 +15,7 @@ const Books = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const { rentBook } = useRentals(user);
+  const { alert, showAlert, clearAlert } = useAlert();
 
   const handleSearch = (query) => {
     if (query.trim() === '') {
@@ -31,11 +32,11 @@ const Books = () => {
     const result = rentBook(book);
 
     if (!result.success) {
-      alert(result.error);
+      showAlert('danger', result.error);
       return;
     }
 
-    alert(`Libro "${book.title}" alquilado con éxito. Fecha de devolución: ${result.rental.dueDate}`);
+    showAlert('success', `Libro "${book.title}" alquilado con éxito. Fecha de devolución: ${result.rental.dueDate}`);
   };
 
   const displayBooks = isSearching ? searchResults : books;
