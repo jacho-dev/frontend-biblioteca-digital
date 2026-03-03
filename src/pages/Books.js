@@ -5,6 +5,8 @@ import { useRentals } from '../hooks/useRentals';
 import BookCard from '../components/BookCard';
 import SearchBar from '../components/SearchBar';
 import LoadingSpinner from '../components/LoadingSpinner';
+import AlertMessage from '../components/AlertMessage';
+import { useAlert } from '../hooks/useAlert';
 import './Books.css';
 
 const Books = () => {
@@ -42,11 +44,13 @@ const Books = () => {
     <div className="books">
       <div className="container">
         <div className="books__header">
-          <h1 className="books__title">Catálogo de Libros</h1>
+          <h1 className="books__title"><i className="fa-solid fa-book-open-reader" /> Catálogo de Libros</h1>
           <p className="books__subtitle">
             Explora nuestra colección de libros disponibles para alquiler
           </p>
         </div>
+
+        <AlertMessage alert={alert} onClose={clearAlert} />
 
         <div className="books__search">
           <SearchBar onSearch={handleSearch} placeholder="Buscar por título, autor, ISBN, categoría..." />

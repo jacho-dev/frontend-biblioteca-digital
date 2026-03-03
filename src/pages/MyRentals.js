@@ -7,6 +7,7 @@ const MyRentals = () => {
   const { user } = useAuth();
   const { userRentals, extendRental, returnRental } = useRentals(user);
   const [filter, setFilter] = useState('all');
+  const { alert, showAlert, clearAlert } = useAlert();
 
   if (!user) {
     return (
@@ -54,11 +55,13 @@ const MyRentals = () => {
     <div className="my-rentals">
       <div className="container">
         <div className="my-rentals__header">
-          <h1 className="my-rentals__title">Mis Alquileres</h1>
+          <h1 className="my-rentals__title"><i className="fa-solid fa-clock-rotate-left" /> Mis Alquileres</h1>
           <p className="my-rentals__subtitle">
             Gestiona tus libros alquilados y sus fechas de devolución
           </p>
         </div>
+
+        <AlertMessage alert={alert} onClose={clearAlert} />
 
         <div className="my-rentals__filters">
           <button

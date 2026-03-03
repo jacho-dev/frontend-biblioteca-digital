@@ -30,7 +30,7 @@ const SearchBar = ({ onSearch, placeholder = "Buscar libros..." }) => {
           className="search-bar__input"
         />
         <button type="submit" className="search-bar__button">
-          🔍
+          <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
         </button>
       </form>
     </div>

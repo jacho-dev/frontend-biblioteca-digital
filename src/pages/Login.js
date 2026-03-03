@@ -46,7 +46,7 @@ const Login = () => {
       <div className="container">
         <div className="login__card">
           <div className="login__header">
-            <h1 className="login__title">Iniciar Sesión</h1>
+            <h1 className="login__title"><i className="fa-solid fa-right-to-bracket" /> Iniciar Sesión</h1>
             <p className="login__subtitle">
               Accede a tu cuenta para alquilar libros
             </p>
@@ -54,8 +54,8 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="login__form">
             {error && (
-              <div className="login__error">
-                {error}
+              <div className="alert alert-danger login__error" role="alert">
+                <i className="fa-solid fa-circle-exclamation" /> {error}
               </div>
             )}
 
@@ -101,7 +101,7 @@ const Login = () => {
           </form>
 
           <div className="login__demo">
-            <h3>Cuentas de Demostración</h3>
+            <h3><i className="fa-solid fa-flask" /> Cuentas de Demostración</h3>
             <div className="login__demo-accounts">
               <div className="login__demo-account">
                 <strong>Administrador:</strong>
